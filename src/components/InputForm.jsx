@@ -1,4 +1,5 @@
 import { FaChevronDown } from "react-icons/fa";
+import TodoList from "./TodoList";
 
 const InputForm = () => {
 	const options = [
@@ -42,9 +43,9 @@ const InputForm = () => {
 			<button className="w-full border-[1px] border-gray-400 hover:border-gray-200 duration-300 font-titleFont font-semibold tracking-wider text-gray-300 hover:text-orange-600 h-10 uppercase rounded-md">
 				Add Todo
 			</button>
-			<div>
-				<ul>
-					<li>Todo will go here</li>
+			<div className="flex flex-col gap-4">
+				<ul className="grid grid-cols-1 gap-4 border border-gray-600 shadow-todoShadow mt-6 p-4">
+					<TodoList />
 				</ul>
 			</div>
 		</div>
