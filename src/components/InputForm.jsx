@@ -1,7 +1,11 @@
 import { FaChevronDown } from "react-icons/fa";
 import TodoList from "./TodoList";
+import { useState } from "react";
 
 const InputForm = () => {
+	const [todoValue, setTodoValue] = useState("");
+	const [error, setError] = useState("");
+
 	const options = [
 		{
 			_id: 1000,
@@ -21,10 +25,23 @@ const InputForm = () => {
 		},
 	];
 
+	const handleTodo = (e) => {
+		e.preventDefault();
+
+		if (todoValue === "") {
+			setError("Please enter a todo!");
+		} else {
+			console.log(todoValue);
+		}
+		setTodoValue("");
+	};
+
 	return (
 		<div className="w-full bg-bodyColor flex flex-col gap-4">
 			<div className="flex items-center gap-4 h-12">
 				<input
+					onChange={(e) => setTodoValue(e.target.value)}
+					value={todoValue}
 					className="w-[80%] h-full bg-bodyColor border-[1px] border-gray-400 py-2 px-4 placeholder:text-gray-400 text-white text-base placeholder:text-sm tracking-wide rounded-md outline-none focus-visible:border-orange-600 hover:border-white"
 					type="text"
 					placeholder="Enter your Todo..."
@@ -40,7 +57,10 @@ const InputForm = () => {
 					</span>
 				</div>
 			</div>
-			<button className="w-full border-[1px] border-gray-400 hover:border-gray-200 duration-300 font-titleFont font-semibold tracking-wider text-gray-300 hover:text-orange-600 h-10 uppercase rounded-md">
+			<button
+				onClick={handleTodo}
+				className="w-full border-[1px] border-gray-400 hover:border-gray-200 duration-300 font-titleFont font-semibold tracking-wider text-gray-300 hover:text-orange-600 h-10 uppercase rounded-md"
+			>
 				Add Todo
 			</button>
 			<div className="flex flex-col gap-4">
