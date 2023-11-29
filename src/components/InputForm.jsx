@@ -1,10 +1,13 @@
 import { FaChevronDown } from "react-icons/fa";
 import TodoList from "./TodoList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ErrMsg from "./msg/ErrMsg";
 
 const InputForm = () => {
 	const [todoValue, setTodoValue] = useState("");
+	const [category, setCategory] = useState("");
 	const [error, setError] = useState("");
+	const [showError, setShowError] = useState(false);
 
 	const options = [
 		{
@@ -30,11 +33,26 @@ const InputForm = () => {
 
 		if (todoValue === "") {
 			setError("Please enter a todo!");
+			setShowError(true);
+		} else if (category === "") {
+			setError("Please select a category!");
+			setShowError(true);
+		} else if (category === "categories") {
+			setError("Please select a valid category!");
+			setShowError(true);
 		} else {
-			console.log(todoValue);
+			setTodoValue("");
 		}
 		setTodoValue("");
 	};
+
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			showError && setShowError(false);
+		}, 2000);
+
+		return () => clearTimeout(timer);
+	}, [showError]);
 
 	return (
 		<div className="w-full bg-bodyColor flex flex-col gap-4">
@@ -47,7 +65,10 @@ const InputForm = () => {
 					placeholder="Enter your Todo..."
 				/>
 				<div className="w-[20%] h-full relative">
-					<select className="w-full h-full capitalize outline-none bg-bodyColor border-[1px] border-gray-400 px-3 cursor-pointer appearance-none rounded-md focus-visible:border-orange-600 hover:border-white">
+					<select
+						onChange={(e) => setCategory(e.target.value)}
+						className="w-full h-full capitalize outline-none bg-bodyColor border-[1px] border-gray-400 px-3 cursor-pointer appearance-none rounded-md focus-visible:border-orange-600 hover:border-white"
+					>
 						{options.map((item) => (
 							<option key={item._id}>{item.title}</option>
 						))}
@@ -68,6 +89,7 @@ const InputForm = () => {
 					<TodoList />
 				</ul>
 			</div>
+			{showError && <ErrMsg error={error} />}
 		</div>
 	);
 };
