@@ -2,10 +2,14 @@ import { FaChevronDown } from "react-icons/fa";
 import TodoList from "./TodoList";
 import { useEffect, useState } from "react";
 import ErrMsg from "./msg/ErrMsg";
+import SuccessMsg from "./msg/SuccessMsg";
 
 const InputForm = () => {
 	const [todoValue, setTodoValue] = useState("");
 	const [category, setCategory] = useState("");
+	const [currentTodo, setCurrentTodo] = useState(false);
+	const [success, setSuccess] = useState("");
+	const [showSuccess, setShowSuccess] = useState(false);
 	const [error, setError] = useState("");
 	const [showError, setShowError] = useState(false);
 
@@ -34,14 +38,21 @@ const InputForm = () => {
 		if (todoValue === "") {
 			setError("Please enter a todo!");
 			setShowError(true);
+			setShowSuccess(false);
 		} else if (category === "") {
 			setError("Please select a category!");
 			setShowError(true);
+			setShowSuccess(false);
 		} else if (category === "categories") {
 			setError("Please select a valid category!");
 			setShowError(true);
+			setShowSuccess(false);
 		} else {
+			setCurrentTodo(todoValue);
 			setTodoValue("");
+			setShowSuccess(true);
+			setShowError(false);
+			setSuccess("Todo added successfully!");
 		}
 		setTodoValue("");
 	};
@@ -49,10 +60,11 @@ const InputForm = () => {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			showError && setShowError(false);
+			showSuccess && setShowSuccess(false);
 		}, 2000);
 
 		return () => clearTimeout(timer);
-	}, [showError]);
+	}, [showError, showSuccess]);
 
 	return (
 		<div className="w-full bg-bodyColor flex flex-col gap-4">
@@ -86,10 +98,11 @@ const InputForm = () => {
 			</button>
 			<div className="flex flex-col gap-4">
 				<ul className="grid grid-cols-1 gap-4 border border-gray-600 shadow-todoShadow mt-6 p-4">
-					<TodoList />
+					<TodoList todoValue={currentTodo} />
 				</ul>
 			</div>
 			{showError && <ErrMsg error={error} />}
+			{showSuccess && <SuccessMsg success={success} />}
 		</div>
 	);
 };

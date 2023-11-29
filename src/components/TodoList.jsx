@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 
-const TodoList = () => {
+const TodoList = ({ todoValue }) => {
 	const [completed, setCompleted] = useState(false);
 
 	return (
@@ -16,7 +16,7 @@ const TodoList = () => {
 			}
             w-full font-titleFont font-medium text-base border-[1px] border-l-[6px] px-2 py-1 cursor-pointer flex items-center justify-between`}
 		>
-			Todo Item
+			{todoValue}
 			<span className="text-xl text-gray-300 hover:text-red-500 duration-300 cursor-pointer">
 				<MdDelete />
 			</span>
