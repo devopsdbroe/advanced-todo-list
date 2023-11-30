@@ -1,11 +1,17 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { MdDelete } from "react-icons/md";
 
-const TodoList = ({ todoValue }) => {
+const TodoList = ({ todo }) => {
 	const [completed, setCompleted] = useState(false);
 
 	return (
-		<li
+		<motion.li
+			initial={{ y: 10, opacity: 0 }}
+			animate={{ y: 0, opacity: 1 }}
+			transition={{
+				y: { type: "spring", stiffness: 120 },
+			}}
 			onClick={() => {
 				setCompleted(!completed);
 			}}
@@ -16,11 +22,11 @@ const TodoList = ({ todoValue }) => {
 			}
             w-full font-titleFont font-medium text-base border-[1px] border-l-[6px] px-2 py-1 cursor-pointer flex items-center justify-between`}
 		>
-			{todoValue}
+			{todo}
 			<span className="text-xl text-gray-300 hover:text-red-500 duration-300 cursor-pointer">
 				<MdDelete />
 			</span>
-		</li>
+		</motion.li>
 	);
 };
 

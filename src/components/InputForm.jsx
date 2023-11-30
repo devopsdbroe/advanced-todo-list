@@ -3,8 +3,12 @@ import TodoList from "./TodoList";
 import { useEffect, useState } from "react";
 import ErrMsg from "./msg/ErrMsg";
 import SuccessMsg from "./msg/SuccessMsg";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodos } from "../reduxStore/TodoSlice";
 
 const InputForm = () => {
+	const dispatch = useDispatch();
+	const todosItem = useSelector((state) => state.todos.todosList);
 	const [todoValue, setTodoValue] = useState("");
 	const [category, setCategory] = useState("");
 	const [currentTodo, setCurrentTodo] = useState(false);
@@ -48,6 +52,13 @@ const InputForm = () => {
 			setShowError(true);
 			setShowSuccess(false);
 		} else {
+			dispatch(
+				addTodos({
+					_id: Math.random(),
+					todo: todoValue,
+					category: category,
+				})
+			);
 			setCurrentTodo(todoValue);
 			setTodoValue("");
 			setShowSuccess(true);
@@ -98,7 +109,9 @@ const InputForm = () => {
 			</button>
 			<div className="flex flex-col gap-4">
 				<ul className="grid grid-cols-1 gap-4 border border-gray-600 shadow-todoShadow mt-6 p-4">
-					<TodoList todoValue={currentTodo} />
+					{todosItem.map((item) => (
+						<TodoList key={item._id} todo={item.todo} />
+					))}
 				</ul>
 			</div>
 			{showError && <ErrMsg error={error} />}
