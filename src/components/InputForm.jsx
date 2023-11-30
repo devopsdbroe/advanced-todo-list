@@ -11,7 +11,6 @@ const InputForm = () => {
 	const todosItem = useSelector((state) => state.todos.todosList);
 	const [todoValue, setTodoValue] = useState("");
 	const [category, setCategory] = useState("");
-	const [currentTodo, setCurrentTodo] = useState(false);
 	const [success, setSuccess] = useState("");
 	const [showSuccess, setShowSuccess] = useState(false);
 	const [error, setError] = useState("");
@@ -59,7 +58,6 @@ const InputForm = () => {
 					category: category,
 				})
 			);
-			setCurrentTodo(todoValue);
 			setTodoValue("");
 			setShowSuccess(true);
 			setShowError(false);
@@ -109,9 +107,15 @@ const InputForm = () => {
 			</button>
 			<div className="flex flex-col gap-4">
 				<ul className="grid grid-cols-1 gap-4 border border-gray-600 shadow-todoShadow mt-6 p-4">
-					{todosItem.map((item) => (
-						<TodoList key={item._id} todo={item.todo} />
-					))}
+					{todosItem.length > 0 ? (
+						todosItem.map((item) => (
+							<TodoList key={item._id} todo={item.todo} _id={item._id} />
+						))
+					) : (
+						<p className="text-center text-base text-yellow-500 font-titleFont font-medium tracking-wide">
+							Your todo list is empty!
+						</p>
+					)}
 				</ul>
 			</div>
 			{showError && <ErrMsg error={error} />}
