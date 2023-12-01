@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import ErrMsg from "./msg/ErrMsg";
 import SuccessMsg from "./msg/SuccessMsg";
 import { useDispatch, useSelector } from "react-redux";
-import { addTodos } from "../reduxStore/TodoSlice";
+import { addTodos, removeTodos } from "../reduxStore/TodoSlice";
+import { motion } from "framer-motion";
 
 const InputForm = () => {
 	const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const InputForm = () => {
 	const [showSuccess, setShowSuccess] = useState(false);
 	const [error, setError] = useState("");
 	const [showError, setShowError] = useState(false);
+	const [showRemove, setShowRemove] = useState(false);
 
 	const options = [
 		{
@@ -117,9 +119,52 @@ const InputForm = () => {
 						</p>
 					)}
 				</ul>
+				{todosItem.length > 0 && (
+					<motion.button
+						initial={{ y: 10, opacity: 0 }}
+						animate={{ y: 0, opacity: 1 }}
+						transition={{ duration: 0.5 }}
+						onClick={() => setShowRemove(true)}
+						className="w-40 h-8 text-sm font-titleFont text-orange-500 hover:text-red-500 font-semibold mx-auto bg-transparent border-[1px] border-gray-500 hover:border-red-500 duration-300"
+					>
+						Remove Todos
+					</motion.button>
+				)}
 			</div>
 			{showError && <ErrMsg error={error} />}
 			{showSuccess && <SuccessMsg success={success} />}
+
+			{showRemove && (
+				// Creates overlay for confirmation message
+				<div
+					onClick={() => setShowRemove(false)}
+					className="w-full h-screen fixed bg-bodyColor top-0 left-0 bg-opacity-60"
+				>
+					<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-8 py-4 bg-bodyColor border-red-500 rounded-md z-50 flex flex-col gap-4 shadow-todoShadow">
+						<p className="text-xl text-center font-medium text-red-500">
+							Are you sure you want to{" "}
+							<span className="font-semibold underline underline-offset-2 decoration-[1px]">
+								remove
+							</span>{" "}
+							all the todos?
+						</p>
+						<div className="flex items-center justify-center gap-4">
+							<button
+								onClick={() => dispatch(removeTodos()) & setShowRemove(false)}
+								className="px-6 py-2 text-base font-titleFont text-orange-500 hover:text-red-500 font-semibold bg-transparent border-[1px] border-gray-50 hover:border-red-500 duration-300"
+							>
+								Yes
+							</button>
+							<button
+								onClick={() => setShowRemove(false)}
+								className="px-6 py-2 text-base font-titleFont text-orange-500 hover:text-green-500 font-semibold bg-transparent border-[1px] border-gray-50 hover:border-green-500 duration-300"
+							>
+								No
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };
